@@ -2,18 +2,13 @@ using UnityEngine;
 
 public class PlayerSpawner : MonoBehaviour
 {
-    public GameObject playerPrefab;  // assign your player prefab in inspector
+    public GameObject playerPrefab;  
 
     void Awake()
     {
         if (playerPrefab != null)
         {
-            // Instantiate player at (0,0,0) with default rotation
-            Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-        }
-        else
-        {
-            Debug.LogError("Player prefab not assigned in PlayerSpawner!");
+            Instantiate(playerPrefab, new Vector3(0, 0.39f, 0), Quaternion.identity);
         }
     }
 }

@@ -47,7 +47,8 @@ public class Spawner : MonoBehaviour
         currentWave++;
         int enemiesToSpawn = startingEnemies + (enemiesPerWaveIncrement * (currentWave - 1));
 
-        GameObject player = GameObject.FindGameObjectWithTag("Player"); // Find player
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+
         if (player == null)
         {
             Debug.LogError("No GameObject with tag 'Player' found!");
@@ -67,7 +68,6 @@ public class Spawner : MonoBehaviour
             GameObject enemy = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
             activeEnemies.Add(enemy);
 
-            // Assign player to EnemyAITrigger
             EnemyAITrigger ai = enemy.GetComponent<EnemyAITrigger>();
             if (ai != null)
             {
@@ -78,7 +78,6 @@ public class Spawner : MonoBehaviour
                 Debug.LogWarning($"Enemy {enemy.name} is missing EnemyAITrigger component!");
             }
 
-            // Assign spawner to EnemyHealth
             EnemyHealth notifier = enemy.GetComponent<EnemyHealth>();
             if (notifier != null)
             {
