@@ -240,6 +240,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4ddd74b23f6ebd40bce40fc13423439, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealthBar
+  slider: {fileID: 946722617957108085}
+  camera: {fileID: 0}
+  parent: {fileID: 5702162100817469419}
 --- !u!1 &2972230957987966891
 GameObject:
   m_ObjectHideFlags: 0
@@ -602,6 +605,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   maxHealth: 100
   spawner: {fileID: 2507869523798939416, guid: 8064f52d24892034498bf612b5f1de7a, type: 3}
+  healthBar: {fileID: 5320428415007754177}
 --- !u!54 &1867166390828093944
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -2,11 +2,26 @@ using UnityEngine;
 
 public class Playermovement : MonoBehaviour
 {
+    //instace singleton
+    public static Playermovement instance;
+    public Camera playerCameraForReference;
+    
     public float speed = 6f;
+
 
     private CharacterController controller;
     [HideInInspector] public Vector3 lastMoveDirection = Vector3.forward;   // default facing
-
+    private void Awake()
+    {
+        playerCameraForReference = GetComponentInChildren<Camera>(); 
+        
+        if(instance == null)
+            instance = this;
+        else
+        {
+            Destroy(this);
+        }
+    }
     void Start()
     {
         controller = GetComponent<CharacterController>();

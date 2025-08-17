@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1671507559999854389}
   - component: {fileID: 7381703603014195673}
   - component: {fileID: 2507869523798939416}
+  - component: {fileID: 7049369959645858137}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -28,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.43562, y: 0.85, z: 4.82187}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.22926, y: 0.22926, z: 0.22926}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -52,7 +53,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 100, y: 1, z: 100}
+  m_Size: {x: 91.6, y: 1, z: 94.4}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2507869523798939416
 MonoBehaviour:
@@ -68,6 +69,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   enemyPrefab: {fileID: 8791316663060736347, guid: 5ee38e7506e58c44b9fda9f620f09443, type: 3}
   roomCenter: {fileID: 1671507559999854389}
-  spawnAreaSize: {x: 100, y: 0, z: 100}
+  spawnAreaSize: {x: 91.6, y: 0, z: 94.4}
   startingEnemies: 5
   enemiesPerWaveIncrement: 2
+  waveDelay: 3
+--- !u!114 &7049369959645858137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1696735751831468487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c34d207c2a515d4487c51e28b4871c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSpawner
+  playerPrefab: {fileID: 481000173308177791, guid: d4e156be4579cd042a0184026595ffb6, type: 3}

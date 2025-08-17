@@ -4,7 +4,7 @@ public class PlayerSpawner : MonoBehaviour
 {
     public GameObject playerPrefab;  // assign your player prefab in inspector
 
-    void Start()
+    void Awake()
     {
         if (playerPrefab != null)
         {
