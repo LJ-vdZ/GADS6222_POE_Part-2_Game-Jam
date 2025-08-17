@@ -6,6 +6,11 @@ public class EnemyHealth : MonoBehaviour
     private int currentHealth;
 
     public Spawner spawner;
+    public EnemyHealthBar halthBar;
+
+    private void Awake()
+    {
+    }
 
     void Start()
     {
@@ -15,7 +20,7 @@ public class EnemyHealth : MonoBehaviour
     public void TakeDamage(int amount)
     {
         currentHealth -= amount;
-
+       
         if (currentHealth <= 0)
         {
             Die();

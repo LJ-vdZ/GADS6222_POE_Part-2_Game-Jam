@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f693daf45a0f77c489ced9c0b28bef4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
-  attackRange: 2
+  attackRange: 5
   damage: 25
   enemyLayer:
     serializedVersion: 2
