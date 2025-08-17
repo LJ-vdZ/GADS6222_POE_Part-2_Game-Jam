@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6288195167642821896}
   - component: {fileID: 625275075812375526}
   - component: {fileID: 3080495027565459549}
+  - component: {fileID: 5199663093437725348}
   m_Layer: 0
   m_Name: player
   m_TagString: Player
@@ -127,6 +128,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Playermovement
   speed: 6
+  lastMoveDirection: {x: 0, y: 0, z: 1}
 --- !u!143 &3080495027565459549
 CharacterController:
   m_ObjectHideFlags: 0
@@ -152,6 +154,24 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5199663093437725348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 481000173308177791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f693daf45a0f77c489ced9c0b28bef4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
+  attackRange: 2
+  damage: 25
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  attackDuration: 0.2
 --- !u!1 &7586642133694861463
 GameObject:
   m_ObjectHideFlags: 0
