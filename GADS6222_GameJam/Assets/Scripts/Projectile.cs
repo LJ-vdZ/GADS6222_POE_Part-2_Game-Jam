@@ -32,9 +32,8 @@ public class Projectile : MonoBehaviour
             }
             Destroy(gameObject); // Destroy on hitting player
         }
-        else if (!other.CompareTag("ShooterEnemy") && !other.CompareTag("Mummy"))
+        else 
         {
-            // Destroy on hitting anything except other enemies
             Destroy(gameObject);
         }
     }

@@ -4,52 +4,40 @@ using UnityEngine;
 public class Seth : MonoBehaviour
 {
     [Header("Stats")]
-    public float moveSpeed = 1.5f; // Slower than Mummy (3f)
-    public int maxHealth = 200; // 4x Mummy's health (50)
+    public float moveSpeed = 1.5f; 
+    public int maxHealth = 100; 
     private int currentHealth;
 
     [Header("AI Settings")]
-    public Transform player; // Set by Spawner
-    public float detectionRange = 15f; // Retained for potential future use
+    public Transform player; 
+    public float detectionRange = 15f; 
     public float obstacleAvoidanceDistance = 1.5f;
     public float obstacleAvoidanceAngle = 45f;
 
     [Header("Attack Settings")]
-    public GameObject projectilePrefab; // Projectile to instantiate
+    public GameObject projectilePrefab;
     public float projectileSpeed = 10f;
-    public int projectileDamage = 15; // Damage dealt to player
-    public float moveDuration = 3f; // Time to move after firing
-    public float fireDelay = 1f; // Delay between each projectile
+    public int projectileDamage = 15; 
+    public float moveDuration = 3f; 
+    public float fireDelay = 1f; 
     private bool isFiring = false;
-
-    [Header("Spawner Reference")]
-    public Spawner spawner; // Set by Spawner
 
     private Vector3 targetDirection;
 
     void Start()
     {
         currentHealth = maxHealth;
+        player = GameObject.FindGameObjectWithTag("Player").transform;
         StartCoroutine(AttackPattern());
-        if (player == null)
-        {
-            Debug.LogWarning("Player Transform not assigned in ShooterEnemy script on " + gameObject.name);
-        }
-        if (spawner == null)
-        {
-            Debug.LogWarning("Spawner not assigned in ShooterEnemy script on " + gameObject.name);
-        }
     }
 
     void Update()
     {
         if (player == null || isFiring) return;
 
-        // Always chase the player
         targetDirection = (player.position - transform.position).normalized;
         targetDirection.y = 0f;
 
-        // Move with obstacle avoidance
         Vector3 moveDirection = AvoidObstacles(targetDirection);
         if (moveDirection.sqrMagnitude > 0.01f)
         {
@@ -107,8 +95,7 @@ public class Seth : MonoBehaviour
     {
         if (projectilePrefab == null) return;
 
-        // Spawn projectile at enemy's position, aimed at player's current position
-        Vector3 spawnPos = transform.position + Vector3.up * 1f; // Slightly above enemy
+        Vector3 spawnPos = transform.position + Vector3.up * 1f; 
         Vector3 direction = (player.position - spawnPos).normalized;
         GameObject projectile = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
         Projectile projScript = projectile.GetComponent<Projectile>();
@@ -138,10 +125,6 @@ public class Seth : MonoBehaviour
 
     void Die()
     {
-        if (spawner != null)
-        {
-            spawner.RegisterEnemyDeath(gameObject);
-        }
         Destroy(gameObject);
     }
 }
