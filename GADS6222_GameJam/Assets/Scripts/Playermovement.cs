@@ -1,10 +1,12 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
 public class Playermovement : MonoBehaviour
 {
     public static Playermovement instance { get; private set; }
     public Camera playerCameraForReference;
+    CharacterController controller;
 
     [Header("Movement")]
     public float moveSpeed = 5f;
@@ -37,6 +39,10 @@ public class Playermovement : MonoBehaviour
             DontDestroyOnLoad(gameObject); // optional: persist across scenes
         }
     }
+    void Start()
+    {
+        controller = GetComponent<CharacterController>();
+    }
 
     void Update()
     {
@@ -51,7 +57,14 @@ public class Playermovement : MonoBehaviour
         float moveZ = Input.GetAxis("Vertical");
 
         Vector3 moveDir = new Vector3(moveX, 0f, moveZ).normalized;
-        transform.position += moveDir * moveSpeed * Time.deltaTime;
+
+        // keep player at the same Y position
+        controller.Move(moveDir * moveSpeed * Time.deltaTime);
+
+        // force Y back to 0
+        Vector3 pos = transform.position;
+        pos.y = 0.21f;
+        transform.position = pos;
     }
 
     void HandleAiming()
