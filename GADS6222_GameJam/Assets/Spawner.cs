@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,34 +7,38 @@ public class Spawner : MonoBehaviour
     public Transform roomCenter;
     public Vector3 spawnAreaSize = new Vector3(10, 0, 10);
     public int startingEnemies = 5;
-    public int enemiesPerWaveIncrement = 2;
-    public float waveDelay = 3f;
+
+    // Objects that should be destroyed when all enemies are dead
+    public GameObject objectToDestroy1;
+    public GameObject objectToDestroy2;
 
     private List<GameObject> activeEnemies = new List<GameObject>();
-    private int currentWave = 0;
     private bool isTriggered = false;
-    private bool isSpawning = false;
 
     private void OnTriggerEnter(Collider other)
     {
         if (!isTriggered && other.CompareTag("Player"))
         {
             isTriggered = true;
-            StartCoroutine(SpawnNextWaveWithDelay());
+            SpawnWave();
         }
     }
 
     public void RegisterEnemyDeath(GameObject enemy)
     {
         activeEnemies.Remove(enemy);
-        if (activeEnemies.Count == 0 && !isSpawning)
+
+        // If no more enemies are left, destroy the two assigned objects
+        if (activeEnemies.Count == 0)
         {
-            StartCoroutine(SpawnNextWaveWithDelay());
+            if (objectToDestroy1 != null) Destroy(objectToDestroy1);
+            if (objectToDestroy2 != null) Destroy(objectToDestroy2);
         }
     }
 
-    IEnumerator SpawnNextWaveWithDelay()
+    void SpawnWave()
     {
+<<<<<<< Updated upstream:GADS6222_GameJam/Assets/Spawner.cs
         isSpawning = true;
         yield return new WaitForSeconds(waveDelay);
         SpawnNextWave();
@@ -55,6 +58,11 @@ public class Spawner : MonoBehaviour
         }
 
         for (int i = 0; i < enemiesToSpawn; i++)
+=======
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+        for (int i = 0; i < startingEnemies; i++)
+>>>>>>> Stashed changes:GADS6222_GameJam/Assets/Scripts/Spawner.cs
         {
             Vector3 randomOffset = new Vector3(
                 Random.Range(-spawnAreaSize.x / 2, spawnAreaSize.x / 2),
@@ -83,10 +91,6 @@ public class Spawner : MonoBehaviour
             if (notifier != null)
             {
                 notifier.spawner = this;
-            }
-            else
-            {
-                Debug.LogWarning($"Enemy {enemy.name} is missing EnemyHealth component!");
             }
         }
     }

@@ -24,7 +24,13 @@ public class EnemyHealthBar : MonoBehaviour
             FindCamera();
             return;
         }
+<<<<<<< Updated upstream:GADS6222_GameJam/Assets/EnemyHealthBar.cs
         transform.rotation = camera.transform.rotation;
+=======
+
+        transform.LookAt(cam.transform);
+        transform.Rotate(0f, 180f, 0f);
+>>>>>>> Stashed changes:GADS6222_GameJam/Assets/Scripts/EnemyHealthBar.cs
     }
     public void FindCamera()
     {
