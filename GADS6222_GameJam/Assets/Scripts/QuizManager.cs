@@ -14,8 +14,6 @@ public class QuizManager : MonoBehaviour
     public int currentQuestion;
     public TextMeshPro questionText; //3D TextMeshPro for question
 
-    public GameObject door; //door GameObject to open on correct answer
-
     public GameObject gameOverPanel; //UI panel for game over
 
     public int playerHealth = 3; //starting health, change in game, this is just test
@@ -23,6 +21,13 @@ public class QuizManager : MonoBehaviour
     private int totalQuestions;
 
     private bool isQuestionAnsweredCorrectly;
+
+    public Transform currentRoomSpawnPoint; //spawn point for current room
+
+    public Transform nextRoomSpawnPoint; //spawn point for next room
+
+    public GameObject player; 
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
@@ -71,32 +76,60 @@ public class QuizManager : MonoBehaviour
 
     public void Correct()
     {
-
+        if (isQuestionAnsweredCorrectly) return; //prevents multiple triggers
 
         isQuestionAnsweredCorrectly = true; //question is answered correctly
-        OpenDoor(); //open door
+        
+        Debug.Log("Correct answer!");
+
+        //move player to next room's spawn point
+        if (nextRoomSpawnPoint != null && player != null)
+        {
+            player.transform.position = nextRoomSpawnPoint.position;
+            player.transform.rotation = nextRoomSpawnPoint.rotation;
+        }
+        else
+        {
+            Debug.LogError("Next room spawn point or player not assigned!");
+        }
+
+        //remove the current question and load a new one
+        QnA.RemoveAt(currentQuestion);
+        if (QnA.Count > 0)
+        {
+            currentQuestion = Random.Range(0, QnA.Count);
+            questionText.text = QnA[currentQuestion].Question;
+            SetAnswers();
+            isQuestionAnsweredCorrectly = false;
+            
+        }
+
+       
+        
     }
 
     public void Wrong()
     {
-        if (!isQuestionAnsweredCorrectly) //reduce health if question selected is wrong
-        {
-            playerHealth -= 1;
-            //healthText.text = "Health: " + playerHealth;
-            if (playerHealth <= 0)
-            {
-                GameOver();
-            }
+        if (isQuestionAnsweredCorrectly) return; //prevent multiple triggers
+        playerHealth -= 1;
+        //healthText.text = "Health: " + playerHealth;
+        Debug.Log("Wrong Answer!");
 
+        if (playerHealth <= 0)
+        {
+            GameOver();
+            return;
         }
-    }
 
-    void OpenDoor()
-    {
-        //move door 
-        if (door != null)
+        //respawn player in current room
+        if (currentRoomSpawnPoint != null && player != null)
         {
-            door.SetActive(false); //use animation/// door.GetComponent<Animator>().SetTrigger("Open");
+            player.transform.position = currentRoomSpawnPoint.position;
+            player.transform.rotation = currentRoomSpawnPoint.rotation;
+        }
+        else
+        {
+            Debug.LogError("Current room spawn point not assigned");
         }
     }
 
