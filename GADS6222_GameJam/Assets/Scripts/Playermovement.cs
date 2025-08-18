@@ -2,42 +2,151 @@ using UnityEngine;
 
 public class Playermovement : MonoBehaviour
 {
-    //instace singleton
-    public static Playermovement instance;
+    public static Playermovement instance { get; private set; }
     public Camera playerCameraForReference;
-    
-    public float speed = 6f;
 
+    [Header("Movement")]
+    public float moveSpeed = 5f;
 
-    private CharacterController controller;
-    [HideInInspector] public Vector3 lastMoveDirection = Vector3.forward;   // default facing
+    [Header("Aiming")]
+    public Transform weaponTransform; // Player’s weapon/arm
+
+    [Header("Melee Attack")]
+    public float attackRange = 2f;
+    [Range(0, 180)] public float attackAngle = 60f; // cone angle
+    public float attackCooldown = 0.5f;
+    public int attackDamage = 20;
+
+    [Header("Effects")]
+    public ParticleSystem hitEffect;
+    public AudioSource swingSound;
+
+    private float attackTimer;
+
     private void Awake()
     {
-        playerCameraForReference = GetComponentInChildren<Camera>(); 
-        
-        if(instance == null)
-            instance = this;
+        // Singleton pattern
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject); // destroy duplicate
+        }
         else
         {
-            Destroy(this);
+            instance = this;
+            DontDestroyOnLoad(gameObject); // optional: persist across scenes
         }
-    }
-    void Start()
-    {
-        controller = GetComponent<CharacterController>();
     }
 
     void Update()
     {
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-
-        Vector3 move = transform.right * x + transform.forward * z;
-
-        // record last non-zero movement direction
-        if (move.sqrMagnitude > 0.001f)
-            lastMoveDirection = move.normalized;
-
-        controller.Move(move * speed * Time.deltaTime);
+        HandleMovement();
+        HandleAiming();
+        HandleAttack();
     }
+
+    void HandleMovement()
+    {
+        float moveX = Input.GetAxis("Horizontal");
+        float moveZ = Input.GetAxis("Vertical");
+
+        Vector3 moveDir = new Vector3(moveX, 0f, moveZ).normalized;
+        transform.position += moveDir * moveSpeed * Time.deltaTime;
+    }
+
+    void HandleAiming()
+    {
+        // Mouse aiming
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, 100f))
+        {
+            Vector3 dir = hitInfo.point - transform.position;
+            dir.y = 0f;
+
+            if (dir.sqrMagnitude > 0.01f)
+                weaponTransform.rotation = Quaternion.LookRotation(dir, Vector3.up);
+        }
+
+        // Optional: add controller right stick aiming if needed
+    }
+
+    void HandleAttack()
+    {
+        if (attackTimer > 0f)
+        {
+            attackTimer -= Time.deltaTime;
+            return;
+        }
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            SwingWeapon();
+            attackTimer = attackCooldown;
+        }
+    }
+
+    void SwingWeapon()
+    {
+        // Play swing sound
+        if (swingSound != null)
+            swingSound.Play();
+
+        // Detect all enemies in range
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, attackRange);
+
+        foreach (Collider col in hitColliders)
+        {
+            Vector3 dirToTarget = col.transform.position - transform.position;
+            dirToTarget.y = 0f;
+
+            // Check if within cone angle
+            if (Vector3.Angle(weaponTransform.forward, dirToTarget) <= attackAngle / 2f)
+            {
+                // Damage GenericMob
+                Mummy gm = col.GetComponent<Mummy>();
+                if (gm != null)
+                {
+                    gm.TakeDamage(attackDamage, transform.position); // Pass attacker's position
+                    PlayHitEffect(col.transform.position);
+                }
+
+                // Damage SmartMob
+                Mummy sm = col.GetComponent<Mummy>();
+                if (sm != null)
+                {
+                    sm.TakeDamage(attackDamage, transform.position); // Pass attacker's position
+                    PlayHitEffect(col.transform.position);
+                }
+            }
+        }
+
+        // Optional: add swing animation
+        StartCoroutine(SwingAnimation());
+    }
+
+    System.Collections.IEnumerator SwingAnimation()
+    {
+        float swingDuration = 0.2f;
+        Quaternion startRot = weaponTransform.localRotation;
+        Quaternion endRot = startRot * Quaternion.Euler(0f, 60f, 0f); // swing 60 degrees
+        float timer = 0f;
+
+        while (timer < swingDuration)
+        {
+            weaponTransform.localRotation = Quaternion.Slerp(startRot, endRot, timer / swingDuration);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        weaponTransform.localRotation = startRot; // reset
+    }
+
+    void PlayHitEffect(Vector3 position)
+    {
+        if (hitEffect != null)
+        {
+            ParticleSystem effect = Instantiate(hitEffect, position, Quaternion.identity);
+            Destroy(effect.gameObject, effect.main.duration);
+        }
+    }
+
 }

@@ -68,14 +68,10 @@ public class Spawner : MonoBehaviour
             GameObject enemy = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
             activeEnemies.Add(enemy);
 
-            EnemyAITrigger ai = enemy.GetComponent<EnemyAITrigger>();
+            Mummy ai = enemy.GetComponent<Mummy>();
             if (ai != null)
             {
                 ai.player = player.transform;
-            }
-            else
-            {
-                Debug.LogWarning($"Enemy {enemy.name} is missing EnemyAITrigger component!");
             }
 
             EnemyHealth notifier = enemy.GetComponent<EnemyHealth>();

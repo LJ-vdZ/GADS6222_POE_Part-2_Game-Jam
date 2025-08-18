@@ -1,82 +1,81 @@
 using UnityEngine;
 
-public class EnemyAITrigger : MonoBehaviour
+public class Mummy : MonoBehaviour
 {
-    public Transform player;
-    public float speed = 3f;
-    public float roamRadius = 5f;
-    public float waitTime = 2f;
+    [Header("Stats")]
+    public float moveSpeed = 3f;
+    public int maxHealth = 50;
+    private int currentHealth;
 
-    private Vector3 roamPoint;
-    private float waitTimer;
-    private bool isChasing = false;
+    [Header("AI Settings")]
+    public Transform player;
+    public float detectionRange = 10f;
 
     void Start()
     {
-        SetNewRoamPoint();
+        currentHealth = maxHealth;
     }
 
     void Update()
     {
-        if (isChasing)
+        if (player == null) return;
+
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+        if (distanceToPlayer <= detectionRange)
         {
-            ChasePlayer();
-        }
-        else
-        {
-            Roam();
+            MoveTowards(player.position);
         }
     }
 
-    void ChasePlayer()
+    void MoveTowards(Vector3 target)
     {
-        Vector3 direction = (player.position - transform.position).normalized;
-        transform.LookAt(player);
-        transform.position += direction * speed * Time.deltaTime;
+        Vector3 dir = target - transform.position;
+        dir.y = 0f;
+
+        if (dir.sqrMagnitude > 0.01f)
+        {
+            transform.position += dir.normalized * moveSpeed * Time.deltaTime;
+            transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
+        }
     }
 
-    void Roam()
+    public void TakeDamage(int damage, Vector3 attackerPosition, float knockbackForce = 0f)
     {
-        Vector3 lookDir = (roamPoint - transform.position).normalized;
-        lookDir.y = 0; 
-        if (lookDir != Vector3.zero)
-        {
-            Quaternion toRotation = Quaternion.LookRotation(lookDir);
-            transform.rotation = Quaternion.Slerp(transform.rotation, toRotation, Time.deltaTime * 5f);
-        }
-        Vector3 direction = (roamPoint - transform.position).normalized;
-        transform.position += direction * speed * Time.deltaTime;
+        currentHealth -= damage;
 
-        if (Vector3.Distance(transform.position, roamPoint) < 1f)
+        if (currentHealth <= 0)
         {
-            waitTimer += Time.deltaTime;
-            if (waitTimer >= waitTime)
+            Die();
+            return;
+        }
+
+        // Apply knockback if > 0
+        if (knockbackForce > 0f)
+        {
+            Vector3 knockDir = (transform.position - attackerPosition).normalized;
+            knockDir.y = 0f;
+            transform.position += knockDir * knockbackForce;
+        }
+    }
+
+    void Die()
+    {
+        Destroy(gameObject);
+    }
+
+    // Optional: detect melee attacks from player
+    public void CheckMeleeHit(Transform playerWeapon, float attackRange, float attackAngle, int attackDamage, float knockback)
+    {
+        Vector3 dirToMob = transform.position - playerWeapon.position;
+        dirToMob.y = 0f;
+
+        if (dirToMob.sqrMagnitude <= attackRange * attackRange)
+        {
+            if (Vector3.Angle(playerWeapon.forward, dirToMob) <= attackAngle / 2f)
             {
-                SetNewRoamPoint();
-                waitTimer = 0f;
+                TakeDamage(attackDamage, playerWeapon.position, knockback);
             }
         }
-    }
-
-    void SetNewRoamPoint()
-    {
-        Vector3 newPoint;
-        do
-        {
-            Vector2 randomOffset = Random.insideUnitCircle * roamRadius;
-            newPoint = new Vector3(
-                transform.position.x + randomOffset.x,
-                transform.position.y,
-                transform.position.z + randomOffset.y
-            );
-        }
-        while (Vector3.Distance(transform.position, newPoint) < 2f) ; 
-
-        roamPoint = newPoint;
-    }
-
-    public void SetChasing(bool chasing)
-    {
-        isChasing = chasing;
     }
 }

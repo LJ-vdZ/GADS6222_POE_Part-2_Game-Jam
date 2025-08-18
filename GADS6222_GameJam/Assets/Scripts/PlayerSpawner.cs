@@ -2,13 +2,14 @@ using UnityEngine;
 
 public class PlayerSpawner : MonoBehaviour
 {
-    public GameObject playerPrefab;  
+    public GameObject playerPrefab;
+    public Transform spawnLocation;
 
     void Awake()
     {
         if (playerPrefab != null)
         {
-            Instantiate(playerPrefab, new Vector3(0, 0.39f, 0), Quaternion.identity);
+            Instantiate(playerPrefab, spawnLocation.position, Quaternion.identity);
         }
     }
 }

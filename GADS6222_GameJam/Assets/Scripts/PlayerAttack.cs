@@ -35,11 +35,11 @@ public class PlayerAttack : MonoBehaviour
     }
 
     void Attack()
-    {
-        Vector3 attackDirection = playerMovement.lastMoveDirection;
-        Vector3 attackPosition = transform.position + attackDirection;
+    {/*
+       // Vector3 attackDirection = playerMovement.lastMoveDirection;
+       // Vector3 attackPosition = transform.position + attackDirection;
 
-        Collider[] hits = Physics.OverlapSphere(attackPosition, attackRange, enemyLayer);
+      //  Collider[] hits = Physics.OverlapSphere(attackPosition, attackRange, enemyLayer);
 
         foreach (var hit in hits)
         {
@@ -48,7 +48,7 @@ public class PlayerAttack : MonoBehaviour
             {
                 enemyHealth.TakeDamage(damage);
             }
-        }
+        }*/
     }
 
     void OnDrawGizmos()
@@ -58,9 +58,9 @@ public class PlayerAttack : MonoBehaviour
         var pm = playerMovement != null ? playerMovement : GetComponent<Playermovement>();
         if (pm == null) return;
 
-        Vector3 attackDirection = pm.lastMoveDirection;
-        Vector3 attackPosition = transform.position + attackDirection;
+      //  Vector3 attackDirection = pm.lastMoveDirection;
+        //Vector3 attackPosition = transform.position + attackDirection;
 
-        Gizmos.DrawWireSphere(attackPosition, attackRange);
+        //Gizmos.DrawWireSphere(attackPosition, attackRange);
     }
 }

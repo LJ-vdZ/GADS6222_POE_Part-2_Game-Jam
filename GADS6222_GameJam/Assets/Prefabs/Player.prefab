@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &354307564457076158
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7805661742969024405}
+  m_Layer: 0
+  m_Name: Weapon transform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7805661742969024405
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 354307564457076158}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -9.27, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3239479829600313293}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7446943929629456363
 GameObject:
   m_ObjectHideFlags: 0
@@ -27,13 +58,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7446943929629456363}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.37108332, y: -0, z: -0, w: 0.9285996}
-  m_LocalPosition: {x: 0, y: 26.9, z: -32}
+  m_LocalRotation: {x: 0.2073156, y: -0, z: -0, w: 0.9782741}
+  m_LocalPosition: {x: 0, y: 68, z: -82.1}
   m_LocalScale: {x: 11.324605, y: 11.324605, z: 11.324605}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3239479829600313293}
-  m_LocalEulerAnglesHint: {x: 43.565, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 23.93, y: 0, z: 0}
 --- !u!20 &948764726385652188
 Camera:
   m_ObjectHideFlags: 0
@@ -172,6 +203,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1332373936292475227}
+  - {fileID: 7805661742969024405}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8681733018909771387
@@ -284,8 +316,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Playermovement
   playerCameraForReference: {fileID: 0}
-  speed: 6
-  lastMoveDirection: {x: 0, y: 0, z: 1}
+  moveSpeed: 5
+  weaponTransform: {fileID: 7805661742969024405}
+  attackRange: 2
+  attackAngle: 60
+  attackCooldown: 0.5
+  attackDamage: 20
+  hitEffect: {fileID: 0}
+  swingSound: {fileID: 0}
 --- !u!143 &-1123156728539958813
 CharacterController:
   m_ObjectHideFlags: 0
