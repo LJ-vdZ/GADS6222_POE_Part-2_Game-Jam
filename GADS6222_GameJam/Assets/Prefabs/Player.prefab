@@ -323,7 +323,7 @@ MonoBehaviour:
   attackAngle: 60
   attackCooldown: 0.5
   attackDamage: 20
-  hitEffect: {fileID: 0}
+  hitEffect: {fileID: 6822783159702858703, guid: 9faeb151697d8a447b18fb28fc77b515, type: 3}
   swingSound: {fileID: 0}
 --- !u!143 &-1123156728539958813
 CharacterController:
