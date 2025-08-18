@@ -4,17 +4,21 @@ public class AnswerScript : MonoBehaviour
 {
     public bool isCorrect = false;
     public QuizManager quizManager;
-    public void Answer() 
+
+    private void OnTriggerEnter(Collider other)
     {
-        if (isCorrect) 
+        if (other.CompareTag("Player"))
         {
-            Debug.Log("Correct");
-            quizManager.Correct();
-        }
-        else 
-        {
-            Debug.Log("Not Correct");
-            quizManager.wrong();
+            if (isCorrect)
+            {
+                Debug.Log("Correct Answer!");
+                quizManager.Correct();
+            }
+            else
+            {
+                Debug.Log("Wrong Answer!");
+                quizManager.Wrong();
+            }
         }
     }
 }

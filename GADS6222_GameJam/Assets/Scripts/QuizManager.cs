@@ -4,95 +4,105 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-
 public class QuizManager : MonoBehaviour
 {
     public List<QuestionAndAnswer> QnA;
-    public GameObject[] options;
+
+    public GameObject[] answerZones; //corner GameObjects for selection
+    public TextMeshPro[] answerTexts; //array of TextMeshPro objects for answer text
+
     public int currentQuestion;
+    public TextMeshPro questionText; //3D TextMeshPro for question
 
-    public TextMeshProUGUI QuestionTxt;
+    public GameObject door; //door GameObject to open on correct answer
 
-    public GameObject QuizPanel;
-    public GameObject GOPanel;
+    public GameObject gameOverPanel; //UI panel for game over
 
-    public TextMeshProUGUI ScoreTxt;
+    public int playerHealth = 3; //starting health, change in game, this is just test
 
-    int totalQuestions = 0;
+    private int totalQuestions;
 
-    public int score;
+    private bool isQuestionAnsweredCorrectly;
 
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
         totalQuestions = QnA.Count;
-        GOPanel.SetActive(false);
-        generateQuestion();
-    }
+        gameOverPanel.SetActive(false);
+        //healthText.text = "Health: " + playerHealth;
 
-    void SetAnswers() 
-    {
-        for(int i = 0; i < options.Length; i++) 
-        {
-            options[i].GetComponent<AnswerScript>().isCorrect = false;
+        isQuestionAnsweredCorrectly = false; //initialize flag
 
-            options[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = QnA[currentQuestion].Answers[i];
-
-            if (QnA[currentQuestion].CorrectAnswer == i + 1) 
-            {
-                options[i].GetComponent <AnswerScript>().isCorrect = true;
-            }
-        
-        
-        }
-    }
-
-    void generateQuestion() 
-    {
-        if(QnA.Count > 0) 
+        //select random question only on start
+        if (QnA.Count > 0)
         {
             currentQuestion = Random.Range(0, QnA.Count);
-
-            QuestionTxt.text = QnA[currentQuestion].Question;
-
+            questionText.text = QnA[currentQuestion].Question;
             SetAnswers();
-
         }
-        else 
+        else
         {
-            Debug.Log("Out of Questions");
+            Debug.Log("No questions available");
             GameOver();
         }
-        
-        
-    }
-
-    public void Correct() 
-    {
-        score += 1;
-
-        QnA.RemoveAt(currentQuestion);
-
-        generateQuestion();
 
 
     }
 
-    public void GameOver() 
+    void SetAnswers()
     {
-        QuizPanel.SetActive(false);
-        GOPanel.SetActive(true);
-        ScoreTxt.text = score + "/" + totalQuestions;
+
+        for (int i = 0; i < answerZones.Length; i++)
+        {
+            AnswerScript answerScript = answerZones[i].GetComponent<AnswerScript>();
+
+            answerScript.isCorrect = (QnA[currentQuestion].CorrectAnswer == i + 1);
+
+            if (answerTexts[i] != null)
+            {
+                answerTexts[i].text = QnA[currentQuestion].Answers[i];
+            }
+            else
+            {
+                Debug.LogError($"AnswerText[{i}] is not assigned!");
+            }
+        }
     }
 
-    public void retry() 
+    public void Correct()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+
+        isQuestionAnsweredCorrectly = true; //question is answered correctly
+        OpenDoor(); //open door
     }
 
-    public void wrong() 
+    public void Wrong()
     {
-        QnA.RemoveAt(currentQuestion);
+        if (!isQuestionAnsweredCorrectly) //reduce health if question selected is wrong
+        {
+            playerHealth -= 1;
+            //healthText.text = "Health: " + playerHealth;
+            if (playerHealth <= 0)
+            {
+                GameOver();
+            }
 
-        generateQuestion();
+        }
+    }
+
+    void OpenDoor()
+    {
+        //move door 
+        if (door != null)
+        {
+            door.SetActive(false); //use animation/// door.GetComponent<Animator>().SetTrigger("Open");
+        }
+    }
+
+    void GameOver()
+    {
+        gameOverPanel.SetActive(true);
+
     }
 }
