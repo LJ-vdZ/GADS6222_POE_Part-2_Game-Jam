@@ -5,7 +5,7 @@ public class UIManager : MonoBehaviour
 {
     public void PlayGame() 
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene("GameLevell");
     }
 
     public void QuitApp() 
@@ -15,7 +15,7 @@ public class UIManager : MonoBehaviour
 
     public void Home()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("StartMenu");
     }
 
 }
