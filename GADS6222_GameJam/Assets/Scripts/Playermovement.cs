@@ -102,7 +102,8 @@ public class Playermovement : MonoBehaviour
         if (swingSound != null)
             swingSound.Play();
 
-        // Detect all enemies in range
+        bool hitSomething = false;
+
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, attackRange);
 
         foreach (Collider col in hitColliders)
@@ -110,28 +111,33 @@ public class Playermovement : MonoBehaviour
             Vector3 dirToTarget = col.transform.position - transform.position;
             dirToTarget.y = 0f;
 
-            // Check if within cone angle
             if (Vector3.Angle(weaponTransform.forward, dirToTarget) <= attackAngle / 2f)
             {
-                // Damage Mummy
                 Mummy mummy = col.GetComponent<Mummy>();
                 if (mummy != null)
                 {
                     mummy.TakeDamage(attackDamage, transform.position);
                     PlayHitEffect(col.transform.position);
+                    hitSomething = true;
                 }
 
-                // Damage ShooterEnemy
                 Seth shooter = col.GetComponent<Seth>();
                 if (shooter != null)
                 {
                     shooter.TakeDamage(attackDamage, transform.position);
                     PlayHitEffect(col.transform.position);
+                    hitSomething = true;
                 }
             }
         }
 
-        // Optional: add swing animation
+        // If no hit, still play effect in front of player
+        if (!hitSomething)
+        {
+            Vector3 effectPos = transform.position + weaponTransform.forward * attackRange * 0.5f;
+            PlayHitEffect(effectPos);
+        }
+
         StartCoroutine(SwingAnimation());
     }
 
