@@ -1477,7 +1477,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3.6924562, y: 0.06426333, z: 5.9481306}
+  m_Size: {x: 3.6924562, y: 0.66, z: 5.9481306}
   m_Center: {x: -1.8877823, y: 0.041154206, z: -3.0039954}
 --- !u!114 &5413299289281701132
 MonoBehaviour:
@@ -1496,7 +1496,9 @@ MonoBehaviour:
   spawnAreaSize: {x: 10, y: 0, z: 10}
   startingEnemies: 5
   enemiesPerWaveIncrement: 2
-  waveDelay: 3
+  waveDelay: 1
+  objectToDestroy1: {fileID: 2384757560988538835}
+  objectToDestroy2: {fileID: 4777059288573293650}
 --- !u!1001 &6365530421113632370
 PrefabInstance:
   m_ObjectHideFlags: 0

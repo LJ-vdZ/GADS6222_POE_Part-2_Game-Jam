@@ -126,10 +126,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98aa3eabd4be3a54298bc987abc75bea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAITrigger
+  moveSpeed: 3
+  maxHealth: 50
+  collisionDamage: 10
   player: {fileID: 3239479829600313293, guid: ae9d7134e94efd14395c056c94e3021c, type: 3}
-  speed: 3
+  detectionRange: 3
   roamRadius: 5
-  waitTime: 2
+  roamInterval: 3
+  stopDuration: 2
 --- !u!1 &2368589856826350422
 GameObject:
   m_ObjectHideFlags: 0
@@ -446,7 +450,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealthBar
   slider: {fileID: 4702235489055508359}
-  camera: {fileID: 0}
+  cam: {fileID: 0}
   parent: {fileID: 0}
 --- !u!1 &8332637976947831201
 GameObject:

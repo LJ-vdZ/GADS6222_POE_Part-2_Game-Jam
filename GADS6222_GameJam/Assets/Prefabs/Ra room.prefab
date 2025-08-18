@@ -257,6 +257,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ffacffa9b365a3f4e8e9299f589dcd9b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7034417993997059780}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ffacffa9b365a3f4e8e9299f589dcd9b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6831652862479852169}
   m_SourcePrefab: {fileID: 100100000, guid: ffacffa9b365a3f4e8e9299f589dcd9b, type: 3}
 --- !u!4 &334129413319228043 stripped
 Transform:
@@ -283,12 +286,28 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.7396214, y: 0.9061676, z: 1.7102467}
-  m_Center: {x: 0, y: 1.7530267, z: 0}
+  m_Size: {x: 1.7396214, y: 8.05, z: 1.7102467}
+  m_Center: {x: 0, y: 4.94, z: 0}
+--- !u!114 &6831652862479852169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146377498210508849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17998f6b82efa5949883a30c303ff708, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerTeleportAndGlow
+  teleportTarget: {fileID: 0}
+  glowIntensity: 0.56
+  glowColor: {r: 0.9056604, g: 0.78405744, b: 0.24350302, a: 1}
+  allowMultipleTriggers: 0
 --- !u!1001 &276292204242733813
 PrefabInstance:
   m_ObjectHideFlags: 0

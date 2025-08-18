@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Playermovement : MonoBehaviour
 {
@@ -65,8 +66,6 @@ public class Playermovement : MonoBehaviour
             if (dir.sqrMagnitude > 0.01f)
                 weaponTransform.rotation = Quaternion.LookRotation(dir, Vector3.up);
         }
-
-        // Optional: add controller right stick aiming if needed
     }
 
     void HandleAttack()
@@ -101,19 +100,19 @@ public class Playermovement : MonoBehaviour
             // Check if within cone angle
             if (Vector3.Angle(weaponTransform.forward, dirToTarget) <= attackAngle / 2f)
             {
-                // Damage GenericMob
-                Mummy gm = col.GetComponent<Mummy>();
-                if (gm != null)
+                // Damage Mummy
+                Mummy mummy = col.GetComponent<Mummy>();
+                if (mummy != null)
                 {
-                    gm.TakeDamage(attackDamage, transform.position); // Pass attacker's position
+                    mummy.TakeDamage(attackDamage, transform.position);
                     PlayHitEffect(col.transform.position);
                 }
 
-                // Damage SmartMob
-                Mummy sm = col.GetComponent<Mummy>();
-                if (sm != null)
+                // Damage ShooterEnemy
+                Seth shooter = col.GetComponent<Seth>();
+                if (shooter != null)
                 {
-                    sm.TakeDamage(attackDamage, transform.position); // Pass attacker's position
+                    shooter.TakeDamage(attackDamage, transform.position);
                     PlayHitEffect(col.transform.position);
                 }
             }
@@ -148,5 +147,4 @@ public class Playermovement : MonoBehaviour
             Destroy(effect.gameObject, effect.main.duration);
         }
     }
-
 }

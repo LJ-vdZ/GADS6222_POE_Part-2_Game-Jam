@@ -182,6 +182,7 @@ GameObject:
   - component: {fileID: 9111675920379719533}
   - component: {fileID: 3451394133676348687}
   - component: {fileID: -1123156728539958813}
+  - component: {fileID: 6208923995866592937}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -292,7 +293,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8168309620447286209}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f693daf45a0f77c489ced9c0b28bef4a, type: 3}
   m_Name: 
@@ -343,9 +344,22 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 20.479998
-  m_Radius: 20.479998
+  m_Radius: 11.01
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6208923995866592937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8168309620447286209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1e07c0be681f434498755bf0c3c196b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  maxHealth: 100

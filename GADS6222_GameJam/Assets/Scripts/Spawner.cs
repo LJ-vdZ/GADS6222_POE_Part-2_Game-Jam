@@ -10,15 +10,18 @@ public class Spawner : MonoBehaviour
     public int startingEnemies = 5;
     public int enemiesPerWaveIncrement = 2;
     public float waveDelay = 3f;
+    public GameObject objectToDestroy1; // First object to destroy
+    public GameObject objectToDestroy2; // Second object to destroy
 
     private List<GameObject> activeEnemies = new List<GameObject>();
     private int currentWave = 0;
     private bool isTriggered = false;
     private bool isSpawning = false;
+    private bool isSpawnerActive = true; // Controls whether spawner can spawn new waves
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!isTriggered && other.CompareTag("Player"))
+        if (!isTriggered && other.CompareTag("Player") && isSpawnerActive)
         {
             isTriggered = true;
             StartCoroutine(SpawnNextWaveWithDelay());
@@ -28,14 +31,27 @@ public class Spawner : MonoBehaviour
     public void RegisterEnemyDeath(GameObject enemy)
     {
         activeEnemies.Remove(enemy);
-        if (activeEnemies.Count == 0 && !isSpawning)
+        if (activeEnemies.Count == 0 && !isSpawning && isSpawnerActive)
         {
-            StartCoroutine(SpawnNextWaveWithDelay());
+            // Destroy the assigned objects if all enemies are dead
+            if (objectToDestroy1 != null)
+            {
+                Destroy(objectToDestroy1);
+            }
+            if (objectToDestroy2 != null)
+            {
+                Destroy(objectToDestroy2); // Fixed typo (was objectTonero)
+            }
+            isSpawnerActive = false; // Disable spawner after destroying objects
         }
     }
 
     IEnumerator SpawnNextWaveWithDelay()
     {
+        if (!isSpawnerActive)
+        {
+            yield break; // Exit coroutine if spawner is disabled
+        }
         isSpawning = true;
         yield return new WaitForSeconds(waveDelay);
         SpawnNextWave();
@@ -44,6 +60,11 @@ public class Spawner : MonoBehaviour
 
     void SpawnNextWave()
     {
+        if (!isSpawnerActive)
+        {
+            return; // Do not spawn if spawner is disabled
+        }
+
         currentWave++;
         int enemiesToSpawn = startingEnemies + (enemiesPerWaveIncrement * (currentWave - 1));
 
@@ -72,16 +93,11 @@ public class Spawner : MonoBehaviour
             if (ai != null)
             {
                 ai.player = player.transform;
-            }
-
-            EnemyHealth notifier = enemy.GetComponent<EnemyHealth>();
-            if (notifier != null)
-            {
-                notifier.spawner = this;
+                ai.spawner = this; // Assign spawner reference
             }
             else
             {
-                Debug.LogWarning($"Enemy {enemy.name} is missing EnemyHealth component!");
+                Debug.LogWarning($"Enemy {enemy.name} is missing Mummy component!");
             }
         }
     }
