@@ -125,7 +125,6 @@ public class Playermovement : MonoBehaviour
 
         PlayHitEffect(attackCenter);
 
-        bool hitSomething = false;
 
         Collider[] hitColliders = Physics.OverlapSphere(attackCenter, attackRange * 0.5f);
 
@@ -141,14 +140,12 @@ public class Playermovement : MonoBehaviour
                 if (mummy != null)
                 {
                     mummy.TakeDamage(attackDamage, transform.position);
-                    hitSomething = true;
                 }
 
                 Seth shooter = col.GetComponent<Seth>();
                 if (shooter != null)
                 {
                     shooter.TakeDamage(attackDamage, transform.position);
-                    hitSomething = true;
                 }
             }
         }

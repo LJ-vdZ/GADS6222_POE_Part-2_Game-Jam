@@ -14,7 +14,7 @@ public class QuizManager : MonoBehaviour
     public int currentQuestion;
     public TextMeshPro questionText; //3D TextMeshPro for question
 
-    public GameObject gameOverPanel; //UI panel for game over
+   // public GameObject gameOverPanel; UI panel for game over
 
     public int playerHealth = 3; //starting health, change in game, this is just test
 
@@ -26,14 +26,18 @@ public class QuizManager : MonoBehaviour
 
     public Transform nextRoomSpawnPoint; //spawn point for next room
 
-    public GameObject player; 
+    public GameObject player;
+
+    [Header("Objects to Destroy")]
+    [SerializeField] private GameObject objectToDestroy1; 
+    [SerializeField] private GameObject objectToDestroy2; 
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
         totalQuestions = QnA.Count;
-        gameOverPanel.SetActive(false);
+        //gameOverPanel.SetActive(false);
         //healthText.text = "Health: " + playerHealth;
 
         isQuestionAnsweredCorrectly = false; //initialize flag
@@ -82,6 +86,10 @@ public class QuizManager : MonoBehaviour
         
         Debug.Log("Correct answer!");
 
+        Destroy(objectToDestroy1);
+        Destroy(objectToDestroy2);
+
+        /*
         //move player to next room's spawn point
         if (nextRoomSpawnPoint != null && player != null)
         {
@@ -91,7 +99,7 @@ public class QuizManager : MonoBehaviour
         else
         {
             Debug.LogError("Next room spawn point or player not assigned!");
-        }
+        }*/
 
         //remove the current question and load a new one
         QnA.RemoveAt(currentQuestion);
@@ -135,7 +143,7 @@ public class QuizManager : MonoBehaviour
 
     void GameOver()
     {
-        gameOverPanel.SetActive(true);
+       // gameOverPanel.SetActive(true);
 
     }
 }

@@ -136,4 +136,4 @@ MonoBehaviour:
   projectileDamage: 15
   moveDuration: 3
   fireDelay: 1
-  spawner: {fileID: 0}
+  clearScreen: {fileID: 4038296334928763595, guid: 49f1e0d5086853343ad928528e482299, type: 3}

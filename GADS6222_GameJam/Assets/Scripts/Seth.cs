@@ -23,6 +23,7 @@ public class Seth : MonoBehaviour
     private bool isFiring = false;
 
     private Vector3 targetDirection;
+    [SerializeField] GameObject clearScreen;
 
     void Start()
     {
@@ -126,5 +127,7 @@ public class Seth : MonoBehaviour
     void Die()
     {
         Destroy(gameObject);
+        clearScreen.SetActive(true);
+        
     }
 }
