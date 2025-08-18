@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class ReturnTeleport : MonoBehaviour
 {
@@ -52,19 +53,34 @@ public class ReturnTeleport : MonoBehaviour
             player = other.gameObject;
             hasTriggered = true; // Prevent multiple triggers
 
-            // Verify player has a Rigidbody
-            if (!player.GetComponent<Rigidbody>())
+            // Verify player has a CharacterController
+            CharacterController controller = player.GetComponent<CharacterController>();
+            if (!controller)
             {
-                Debug.LogWarning("Player has no Rigidbody! Adding one for trigger detection.");
-                player.AddComponent<Rigidbody>().isKinematic = true;
+                Debug.LogWarning("Player has no CharacterController! Cannot teleport.");
+                return;
             }
 
             // Teleport player back to original position
             if (firstTrigger != null)
             {
+                // Disable CharacterController to allow transform change
+                controller.enabled = false;
                 player.transform.position = firstTrigger.GetOriginalPlayerPosition();
                 player.transform.rotation = firstTrigger.GetOriginalPlayerRotation();
+                controller.enabled = true;
                 Debug.Log("Player returned to original position: " + player.transform.position);
+
+                // Notify Playermovement to skip Y-position lock for one frame
+                Playermovement movementScript = player.GetComponent<Playermovement>();
+                if (movementScript != null)
+                {
+                    StartCoroutine(movementScript.SkipYLockForFrame());
+                }
+                else
+                {
+                    Debug.LogWarning("Playermovement script not found on player!");
+                }
 
                 // Restore original lighting
                 firstTrigger.RestoreLighting();

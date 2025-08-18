@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class DarkReset : MonoBehaviour
 {
@@ -34,26 +35,39 @@ public class DarkReset : MonoBehaviour
     {
         Debug.Log("Trigger entered by: " + other.gameObject.name);
 
-        // Check if the object entering the trigger is the player
         if (other.CompareTag("Player") && (!hasTriggered || allowMultipleTriggers))
         {
             Debug.Log("Player detected in trigger on " + gameObject.name);
             player = other.gameObject;
             hasTriggered = true;
 
-            // Verify player has a Rigidbody
-            if (!player.GetComponent<Rigidbody>())
+            // Verify player has a CharacterController
+            CharacterController controller = player.GetComponent<CharacterController>();
+            if (!controller)
             {
-                Debug.LogWarning("Player has no Rigidbody! Adding one for trigger detection.");
-                player.AddComponent<Rigidbody>().isKinematic = true; // Kinematic to avoid physics issues
+                Debug.LogWarning("Player has no CharacterController! Cannot teleport.");
+                return;
             }
 
-            // Teleport player to target transform
             if (teleportTarget != null)
             {
+                // Disable CharacterController to allow transform change
+                controller.enabled = false;
                 player.transform.position = teleportTarget.position;
                 player.transform.rotation = teleportTarget.rotation;
+                controller.enabled = true;
                 Debug.Log("Player teleported to " + teleportTarget.position);
+
+                // Notify Playermovement to skip Y-position lock for one frame
+                Playermovement movementScript = player.GetComponent<Playermovement>();
+                if (movementScript != null)
+                {
+                    StartCoroutine(movementScript.SkipYLockForFrame());
+                }
+                else
+                {
+                    Debug.LogWarning("Playermovement script not found on player!");
+                }
             }
             else
             {

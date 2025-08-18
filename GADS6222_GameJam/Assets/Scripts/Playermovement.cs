@@ -25,6 +25,7 @@ public class Playermovement : MonoBehaviour
     public AudioSource swingSound;
 
     private float attackTimer;
+    private bool skipYLock = false; // Flag to skip Y-position locking
 
     private void Awake()
     {
@@ -39,6 +40,7 @@ public class Playermovement : MonoBehaviour
             DontDestroyOnLoad(gameObject); // optional: persist across scenes
         }
     }
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -58,13 +60,23 @@ public class Playermovement : MonoBehaviour
 
         Vector3 moveDir = new Vector3(moveX, 0f, moveZ).normalized;
 
-        // keep player at the same Y position
+        // Keep player at the same Y position unless skipYLock is true
         controller.Move(moveDir * moveSpeed * Time.deltaTime);
 
-        // force Y back to 0
-        Vector3 pos = transform.position;
-        pos.y = 0.21f;
-        transform.position = pos;
+        if (!skipYLock)
+        {
+            Vector3 pos = transform.position;
+            pos.y = 0.21f;
+            transform.position = pos;
+        }
+    }
+
+    // Coroutine to skip Y-position lock for one frame
+    public IEnumerator SkipYLockForFrame()
+    {
+        skipYLock = true;
+        yield return null; // Wait for one frame
+        skipYLock = false;
     }
 
     void HandleAiming()
@@ -98,26 +110,37 @@ public class Playermovement : MonoBehaviour
 
     void SwingWeapon()
     {
-        // Play swing sound
         if (swingSound != null)
             swingSound.Play();
 
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (!Physics.Raycast(ray, out RaycastHit hitInfo, 100f))
+            return;
+
+        Vector3 dirToMouse = hitInfo.point - transform.position;
+        dirToMouse.y = 0f;
+        dirToMouse.Normalize();
+
+        Vector3 attackCenter = transform.position + dirToMouse * (attackRange * 0.5f);
+
+        PlayHitEffect(attackCenter);
+
         bool hitSomething = false;
 
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, attackRange);
+        Collider[] hitColliders = Physics.OverlapSphere(attackCenter, attackRange * 0.5f);
 
         foreach (Collider col in hitColliders)
         {
+            // Optional: cone check so the attack is still directional
             Vector3 dirToTarget = col.transform.position - transform.position;
             dirToTarget.y = 0f;
 
-            if (Vector3.Angle(weaponTransform.forward, dirToTarget) <= attackAngle / 2f)
+            if (Vector3.Angle(dirToMouse, dirToTarget) <= attackAngle / 2f)
             {
                 Mummy mummy = col.GetComponent<Mummy>();
                 if (mummy != null)
                 {
                     mummy.TakeDamage(attackDamage, transform.position);
-                    PlayHitEffect(col.transform.position);
                     hitSomething = true;
                 }
 
@@ -125,17 +148,9 @@ public class Playermovement : MonoBehaviour
                 if (shooter != null)
                 {
                     shooter.TakeDamage(attackDamage, transform.position);
-                    PlayHitEffect(col.transform.position);
                     hitSomething = true;
                 }
             }
-        }
-
-        // If no hit, still play effect in front of player
-        if (!hitSomething)
-        {
-            Vector3 effectPos = transform.position + weaponTransform.forward * attackRange * 0.5f;
-            PlayHitEffect(effectPos);
         }
 
         StartCoroutine(SwingAnimation());
